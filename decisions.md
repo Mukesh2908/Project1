@@ -372,3 +372,58 @@ skill *or its role family* — "Senior Data Engineer" corroborates a
 `data_engineer` primary just as "React Developer" corroborates React. A title
 that contradicts the primary (a "Data Engineer" role whose primary reads as
 React) should still lose the points, which is what the signal is actually for.
+
+---
+
+## Scale run — 20 JDs x 120 profiles, 2,400 pairings
+
+`tests/fixtures/corpus_gen.py` generates a seeded corpus: 20 JDs (10 role
+families x senior/mid) and 120 profiles (12 per lane) varied across voice,
+date completeness, production evidence, depth verbs, claim honesty and
+padding. Seeded, so a failure is reproducible from the seed rather than
+intermittent. Every JD ranks at least 10 profiles, which is what makes
+ordering meaningful to test at all.
+
+### One more defect, same class as the last two
+
+`validate_summary` rejected **the engine's own template summary** whenever a
+skill was matched through a related technology. `template_summary` writes
+"related technology (Angular), credit capped at 50%" directly from the facts;
+the validator then called it hallucinated, because the allowed set was built
+from requirement names and omitted `matched_skill`. 118 of 556 scored results
+failed on this.
+
+That is three defects now in the same spot — multi-word names, then
+`matched_skill` — all from the allowed set being assembled by hand from a
+partial slice of the facts. The validator is checking a *narrower* vocabulary
+than the facts it is validating against, so anything the engine legitimately
+says about a fact it holds gets thrown away. Worth a rethink rather than a
+third patch: derive the vocabulary from the whole facts structure.
+
+### Quality at scale
+
+| Measure | Result |
+|---|---|
+| Lane precision@10 | 95% |
+| Including legitimately transferable neighbour lanes | 100% |
+| Correct lane at rank 1 | 20 of 20 JDs |
+| Junior in the top 3 of a senior role | never |
+| Mid-level JD admits at least as many as its senior twin | all 10 pairs |
+| Invariant failures across 556 scored results | 0 |
+| Determinism | identical across repeated runs |
+| 2,400 pairings scored | 0.30s |
+
+### The JD-confidence finding, now conclusive
+
+At this scale the effect reported above is unambiguous. All 20 generated JDs
+are role-titled, as real JDs overwhelmingly are, and **every one scores exactly
+51% — Low**. Because low JD confidence is itself a review trigger:
+
+- **556 of 556** scored candidates flagged for review — 100%.
+- **251 of them (45%)** carry no flag except the JD's own confidence score.
+
+The review queue contains the entire pool. Nothing about those candidates is
+unclear; the JD simply did not put the technology in its title. This remains
+unfixed pending a human decision, because it changes scoring semantics on
+every run. The proposed fix is unchanged: credit the title signal when the
+title names the primary skill *or its role family*.

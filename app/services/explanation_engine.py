@@ -233,13 +233,26 @@ def validate_summary(summary: str, facts: dict) -> tuple[bool, str]:
     # Factory, Spring Boot, AWS Glue, Delta Lake — and fell back to the
     # template without saying why.
     known: set[str] = set()
+
+    def allow(value: str | None) -> None:
+        if not value:
+            return
+        lowered = value.lower()
+        known.add(lowered)
+        known.update(lowered.split())
+
     for entry in facts["skills"]:
-        name = entry["skill"].lower()
-        known.add(name)
-        known.update(name.split())
-    primary = (facts.get("candidate_primary") or "").lower()
-    known.add(primary)
-    known.update(primary.split())
+        allow(entry["skill"])
+        # The skill a requirement was actually matched through. Related and
+        # equivalent credit (section 10.1) names it in the gap text, so the
+        # engine's own template summary says "related technology (Angular)"
+        # — and without this the validator rejected that summary as
+        # hallucinated, discarding it for every candidate matched through a
+        # neighbouring technology.
+        allow(entry.get("matched_skill"))
+    allow(facts.get("candidate_primary"))
+    for name in facts.get("jd_primary") or []:
+        allow(name)
 
     for token in re.findall(r"\b[A-Z][A-Za-z.+#]{2,}\b", summary):
         if token.lower() in {
