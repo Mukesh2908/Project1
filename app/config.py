@@ -83,6 +83,28 @@ def provider_of(model: str) -> str:
     return model.split("/", 1)[0] if "/" in model else model
 
 
+def retention_months() -> int:
+    """Months a profile's data is kept before it is listed for review — settings.yaml."""
+    return int((load_settings().get("privacy") or {}).get("retention_months", 12))
+
+
+def retain_until(parsed_on: Any = None) -> str:
+    """The date a profile becomes due for retention review, as an ISO string.
+
+    Computed once, at parse time, and stored on the profile row rather than
+    recomputed from the current setting on every read. If retention_months is
+    later shortened, profiles already ingested keep the commitment that applied
+    when they were parsed rather than retroactively becoming overdue — the
+    defensible reading of what a retention *policy* means, as opposed to a
+    live filter.
+    """
+    from datetime import date as _date
+    from datetime import timedelta as _timedelta
+
+    parsed_on = parsed_on or _date.today()
+    return (parsed_on + _timedelta(days=30 * retention_months())).isoformat()
+
+
 def storage_path(*parts: str) -> Path:
     path = STORAGE_DIR.joinpath(*parts)
     path.parent.mkdir(parents=True, exist_ok=True)

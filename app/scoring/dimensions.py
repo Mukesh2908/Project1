@@ -6,11 +6,16 @@ candidate: if candidates faced different skill sets the comparison table would
 be meaningless.
 """
 
-from app.schemas.evidence import ProfileRecord
+import re
+
+from app.schemas.evidence import ProfileRecord, Project
 from app.schemas.jd import JDConfig, Requirement
 from app.schemas.result import SkillFit, WeightConfig
 
 FAMILY_ADJACENT_CREDIT = 0.5
+#: Words shorter than this are mostly stopwords ("the", "and", "for") and add
+#: noise rather than signal to a responsibility-overlap comparison.
+MIN_OVERLAP_WORD_LEN = 4
 
 
 def select_scored_requirements(jd: JDConfig, cap: int) -> JDConfig:
@@ -57,6 +62,44 @@ def tier_score(fits: list[SkillFit], tier: str, weights: WeightConfig) -> float 
     )
 
 
+def default_project_relevance(project: Project, jd: JDConfig) -> float:
+    """Lexical stand-in for the embedding similarity project.md 11.1 calls for.
+
+    ``sentence-transformers`` is an optional extra (project.md 6) that may not
+    be installed or wired up. A constant here — the previous behaviour — gave
+    every project on every candidate the same 40-point credit regardless of
+    what the project actually says, which is not "measures nothing" by
+    accident: it is mathematically incapable of discriminating between a
+    project that matches the JD and one that does not.
+
+    This compares the project's tagged skills and free text against the JD's
+    required skills and responsibility bullets. It is a deliberately cruder
+    signal than a real embedding, but it varies with content, which a
+    constant never can. Pass a populated ``relevance`` dict to
+    ``project_experience_score`` once real embeddings are wired through
+    ``app/retrieval`` — this function is only the fallback.
+    """
+    wanted_skills = {r.skill.lower() for r in jd.requirements if r.category == "skill"}
+    text = (project.text or "").lower()
+    project_skills = {s.skill.lower() for s in project.skills}
+
+    skill_hits = sum(1 for skill in wanted_skills if skill in project_skills or skill in text)
+    skill_score = skill_hits / len(wanted_skills) if wanted_skills else 0.0
+
+    responsibility_words = {
+        word
+        for bullet in jd.responsibilities
+        for word in re.findall(rf"[a-z]{{{MIN_OVERLAP_WORD_LEN},}}", bullet.lower())
+    }
+    project_words = set(re.findall(rf"[a-z]{{{MIN_OVERLAP_WORD_LEN},}}", text))
+    overlap = responsibility_words & project_words
+    responsibility_score = len(overlap) / len(responsibility_words) if responsibility_words else 0.0
+
+    if wanted_skills and responsibility_words:
+        return round(0.6 * skill_score + 0.4 * responsibility_score, 4)
+    return round(skill_score or responsibility_score, 4)
+
+
 def project_experience_score(
     profile: ProfileRecord,
     jd: JDConfig,
@@ -66,6 +109,10 @@ def project_experience_score(
 
     Per project: relevance 40 · uses primary/core 25 · complexity 10 ·
     ownership 10 · production 10 · duration 5. Latest x1.0, older x0.8.
+
+    ``relevance`` lets a caller supply real embedding similarities keyed by
+    project_id; any project missing from that dict falls back to
+    ``default_project_relevance`` rather than a constant.
     """
     if not profile.projects:
         return None
@@ -74,7 +121,9 @@ def project_experience_score(
     scored: list[float] = []
     latest_id = profile.projects[0].project_id if profile.projects else None
     for project in profile.projects:
-        rel = relevance.get(project.project_id, 0.5)
+        rel = relevance.get(project.project_id)
+        if rel is None:
+            rel = default_project_relevance(project, jd)
         uses = any(s.skill.lower() in primary_core for s in project.skills)
         max_depth = max((s.depth for s in project.skills), default=0)
         owns = any(s.ownership == "self" for s in project.skills)

@@ -107,6 +107,7 @@ def analyse(
         domain_required=analysis.domain_required,
         experience_min=analysis.years_min,
         experience_max=analysis.years_max,
+        responsibilities=analysis.responsibilities,
         requirements=requirements,
         conflicts=conflicts,
         confidence=confidence,

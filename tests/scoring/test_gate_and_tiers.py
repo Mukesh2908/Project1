@@ -217,3 +217,94 @@ def test_importance_weighting_matches_the_spec_core_mean():
         SkillFit(skill="Redux", tier="core", importance="important", fit=0.622),
     ]
     assert round(importance_weighted_mean(fits, MULTIPLIERS), 1) == 84.9
+
+
+# -- project relevance is no longer a constant (fixes a dead 0.5 fallback) --
+
+
+def test_project_relevance_discriminates_by_content():
+    """The previous behaviour gave every project 0.5 regardless of content,
+    which is mathematically incapable of telling a matching project from an
+    unrelated one. This proves the replacement actually varies."""
+    from app.schemas.evidence import Project
+    from app.scoring.dimensions import default_project_relevance
+
+    jd = JDConfig(
+        jd_id="X",
+        responsibilities=["Build and ship React components for banking journeys"],
+        requirements=[
+            Requirement(skill="React", tier="primary", category="skill"),
+            Requirement(skill="TypeScript", tier="core", category="skill"),
+        ],
+    )
+    matching = Project(
+        project_id="p1",
+        title="Banking Portal",
+        text="Built React components and TypeScript screens for banking journeys",
+        skills=[],
+    )
+    unrelated = Project(
+        project_id="p2",
+        title="Warehouse Inventory",
+        text="Maintained a legacy COBOL batch job for warehouse inventory counts",
+        skills=[],
+    )
+    empty = Project(project_id="p3", title="Untitled", text="", skills=[])
+
+    high = default_project_relevance(matching, jd)
+    low = default_project_relevance(unrelated, jd)
+    zero = default_project_relevance(empty, jd)
+
+    # The unrelated project shares literally no tokens with the JD, so 0 is
+    # the correct answer for it, not a test bug — the point being proven is
+    # that it differs from `high` at all, which a constant never could.
+    assert high > low
+    assert high > 0
+    assert zero == 0.0
+    assert 0.0 <= high <= 1.0
+    assert 0.0 <= low <= 1.0
+
+
+def test_project_relevance_with_no_jd_text_does_not_crash():
+    from app.schemas.evidence import Project
+    from app.scoring.dimensions import default_project_relevance
+
+    jd = JDConfig(jd_id="X")
+    project = Project(project_id="p1", title="Something", text="some text", skills=[])
+    assert default_project_relevance(project, jd) == 0.0
+
+
+def test_project_experience_score_now_varies_with_project_content():
+    """End to end: project_experience_score must no longer be identical for
+    two candidates whose projects have completely different content."""
+    from datetime import date
+
+    from app.schemas.evidence import ProfileRecord, Project
+    from app.scoring.dimensions import project_experience_score
+
+    jd = JDConfig(
+        jd_id="X",
+        responsibilities=["Build and ship React components for banking journeys"],
+        requirements=[Requirement(skill="React", tier="primary", category="skill")],
+    )
+
+    def profile_with(text: str) -> ProfileRecord:
+        return ProfileRecord(
+            profile_id="C",
+            projects=[
+                Project(
+                    project_id="p1",
+                    title="Project",
+                    start=date(2022, 1, 1),
+                    end=None,
+                    text=text,
+                    skills=[],
+                )
+            ],
+        )
+
+    on_topic = project_experience_score(
+        profile_with("Built React components for banking journeys"), jd
+    )
+    off_topic = project_experience_score(profile_with("Maintained a legacy COBOL batch job"), jd)
+    assert on_topic > off_topic

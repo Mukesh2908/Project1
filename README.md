@@ -16,6 +16,19 @@ verdicts, explanations, the Streamlit UI, the 9-sheet Excel report and the eval
 harness. Live model calls need provider keys; everything runs offline with
 `--mock`.
 
+Two-column PDF layouts — flagged as a top risk in §24 — are now genuinely
+handled: columns are detected and read column-by-column rather than
+interleaved, with the uncertainty surfaced as a parse issue rather than
+silently corrupting the text. Schema changes go through Alembic
+(`alembic upgrade head`); the `--mock`/fixture-mode path no longer depends on
+the `tests/` tree being present. Project relevance uses a real per-project
+lexical comparison against the JD rather than a constant.
+
+**Still open:** the Phase 0 depth-agreement spike (§22.2) has never run
+against a live model — no provider keys are available in this environment, so
+everything above has only been exercised against the deterministic demo
+provider. Run it before trusting depth judgments on real resumes.
+
 | Document | What it is |
 |---|---|
 | [`project.md`](project.md) | The specification — the source of truth |

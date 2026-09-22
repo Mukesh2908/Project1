@@ -45,7 +45,7 @@ def get_provider() -> AIProvider:
 
 
 def _mock_provider() -> MockProvider:
-    from tests.fixtures.mock_responses import build_mock_provider
+    from app.ai.demo_provider import build_mock_provider
 
     return build_mock_provider()
 

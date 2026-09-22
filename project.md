@@ -670,7 +670,7 @@ The scoring engine contains no hard-coded final weights.
 | Primary skill | Importance-weighted mean of primary skill fits; each primary also shown separately (§11.4) |
 | Core skills | Importance-weighted mean of the **top 5** core requirements (§11.4) |
 | Secondary skills | Importance-weighted mean of the **top 5** secondary requirements (§11.4) |
-| Project experience | Per project: relevance to JD responsibilities (embedding similarity) 40 · uses primary/core 25 · complexity (max depth) 10 · ownership 10 · production 10 · duration 5. Latest ×1.0, older ×0.8; mean of the top 2 projects |
+| Project experience | Per project: relevance to JD responsibilities (embedding similarity, or a lexical fallback — see below) 40 · uses primary/core 25 · complexity (max depth) 10 · ownership 10 · production 10 · duration 5. Latest ×1.0, older ×0.8; mean of the top 2 projects |
 | Relevant experience | `min(1, years in the JD's role family ÷ JD min years)`. Above max + 3 years → "possibly overqualified" flag, no penalty |
 | Certification | `(required held × 1 + preferred held × 0.5) ÷ (required + 0.5 × preferred)`; expired counts half |
 | Education | Required degree met 1 · related 0.5 · none 0 |
@@ -680,6 +680,17 @@ The scoring engine contains no hard-coded final weights.
 Recency, ownership, production and depth live *inside* skill proof, never as
 separate top-level dimensions — otherwise they would be counted twice.
 **Location is a filter, never a score.**
+
+> **Relevance without embeddings.** `sentence-transformers` is an optional
+> extra (§6) and may not be configured. When no embedding similarity is
+> supplied, `project_experience_score` falls back to
+> `default_project_relevance` — a lexical comparison of the project's tagged
+> skills and text against the JD's required skills and responsibility bullets
+> (`app/scoring/dimensions.py`). This replaced an earlier implementation that
+> defaulted every project to a constant 0.5, which gave this 40-point part
+> zero ability to distinguish a relevant project from an irrelevant one. The
+> fallback is deliberately cruder than a real embedding; wire `app/retrieval`
+> and pass a populated `relevance` dict to use it instead.
 
 ### 11.2 Weights derived from the JD (D8)
 

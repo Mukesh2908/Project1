@@ -293,3 +293,24 @@ Also measured rather than assumed: **the writing-style effect is 8.3 points**
 still land on the same verdict, so the confound is real but not currently
 decision-changing on this pair — which is exactly the kind of claim that needed
 a number rather than an argument.
+
+---
+
+## Found while operating it — four gaps a "yes, it runs" check missed
+
+Passing the test suite and rendering the UI both looked clean, but neither
+exercises real-world input shapes or a shipped install's file layout. Checking
+those surfaced four separate problems, all fixed:
+
+| Gap | What was actually happening | Fix |
+|---|---|---|
+| Two-column PDFs (§24's own top risk) | PyMuPDF blocks were sorted by `(y, x)`, which interleaves two side-by-side columns roughly at random. On a real two-column resume this pushed a CERTIFICATIONS heading from a short left sidebar into the middle of the right column's text, which then silently swallowed every line after it as a certification entry — and `parse_issues` came back empty, so nothing flagged it. The verdict still read Deployable Now | Columns are detected by clustering blocks on a page-width-relative x-gap, read column by column, with a full-width block treated as a separator. Detection is surfaced as a parse issue rather than hidden |
+| `app/cli.py` and `app/ui/state.py` imported `tests.fixtures.mock_responses` | `--mock` and the UI's fixture-mode checkbox — the only way to try the app without provider keys — would `ImportError` in any install shipped without the `tests/` directory | Moved to `app/ai/demo_provider.py` (production code); `tests/fixtures/mock_responses.py` re-exports it so the test suite's imports are unaffected. A test asserts no package under `app/` imports from `tests` |
+| `project_experience_score`'s `relevance` fell back to a constant `0.5` for every project on every candidate | Not merely a weak signal — a constant is *mathematically incapable* of telling a relevant project from an irrelevant one, on a part worth 40 of the dimension's 100 points | `default_project_relevance` compares a project's tagged skills and text against the JD's required skills and (now-carried-through) responsibility bullets. Deliberately cruder than a real embedding; wire `app/retrieval` and pass a populated `relevance` dict to replace it |
+| `migrations/` was empty despite a stated SQLite → PostgreSQL path, and `retain_until` was a schema column nothing ever wrote to | No upgrade path for a real deployment; retention checks recomputed the cutoff live from `parsed_at` and ignored the column entirely | Alembic scaffolded with an initial revision matching the 12-table schema exactly (asserted by a test). `save_profile` now computes `retain_until` once, at parse time; `due_for_review` reads it, falling back to the old dynamic check only for rows saved before this fix. This also means a later change to `retention_months` does not retroactively flag profiles that were compliant when ingested — a retention *commitment*, not a live filter |
+
+**Still not done: the Phase 0 depth-agreement spike (§22.2) has never run
+against a live model.** No provider keys are available in this environment.
+Every claim about the pipeline above is verified against the demo provider's
+hand-written rules, not against an actual LLM's judgment — that remains the
+largest untested assumption in the build.

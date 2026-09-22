@@ -85,6 +85,10 @@ class JDConfig(BaseModel):
     domain_required: bool = False
     experience_min: float | None = None
     experience_max: float | None = None
+    #: Kept so project relevance (project.md 11.1) can compare a candidate's
+    #: project text against what the role actually asks for, not just its
+    #: skill list.
+    responsibilities: list[str] = Field(default_factory=list)
     requirements: list[Requirement] = Field(default_factory=list)
     conflicts: list[Conflict] = Field(default_factory=list)
     confidence: int = 0

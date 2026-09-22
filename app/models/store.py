@@ -25,6 +25,7 @@ from sqlalchemy import (
 from sqlalchemy.orm import Session, declarative_base, sessionmaker
 
 from app.config import STORAGE_DIR
+from app.config import retain_until as compute_retain_until
 from app.schemas.evidence import ManualEvidence, ProfileRecord
 from app.schemas.jd import JDConfig
 from app.schemas.result import MatchResult
@@ -194,6 +195,12 @@ class Store:
         prompt_version: str = "",
         retain_until: str | None = None,
     ) -> None:
+        # Computed once, at first save, rather than left null: due_for_review
+        # (retention_service.py) reads this column directly so a later change
+        # to the retention setting does not retroactively flag profiles that
+        # were compliant when they were ingested. An explicit caller-supplied
+        # value (e.g. a migration backfill) always wins.
+        retain_until = retain_until or compute_retain_until()
         with self.session() as session:
             session.merge(
                 Profile(

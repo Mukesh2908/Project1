@@ -62,6 +62,21 @@ def test_scoring_does_not_read_files_or_call_out():
                 assert node.func.id not in banned, f"{path} calls {node.func.id}()"
 
 
+def test_app_does_not_depend_on_the_tests_tree():
+    """app/cli.py's --mock flag and the UI's fixture-mode checkbox must work
+    in a shipped install that has no tests/ directory at all."""
+    for package in ("services", "scoring", "schemas", "models", "ai", "ui"):
+        for path in modules_in(package):
+            roots = imported_roots(path)
+            assert "tests" not in roots, (
+                f"{path} imports from the tests tree. The demo provider lives "
+                "in app/ai/demo_provider.py for exactly this reason."
+            )
+    # cli.py sits directly under app/, not in one of the packages above.
+    cli = APP / "cli.py"
+    assert "tests" not in imported_roots(cli), f"{cli} imports from the tests tree."
+
+
 def test_every_llm_call_goes_through_the_provider():
     """No service may reach litellm or instructor directly (project.md 19.1)."""
     for package in ("services", "scoring"):
