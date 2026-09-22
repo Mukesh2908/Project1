@@ -98,12 +98,7 @@ def table(rows) -> pd.DataFrame:
                 "Core": round(r.dimension_scores.get("core_skills") or 0, 1),
                 "Projects": round(r.dimension_scores.get("project_experience") or 0, 1),
                 "Primary evidence": "yes" if r.prefilter_passed else "none",
-                "Main Strength": (r.explanation.strengths or ["—"])[0],
-                "Main Gap": (
-                    r.explanation.why_not_higher[0]["dimension"]
-                    if r.explanation.why_not_higher
-                    else "—"
-                ),
+                "Why this score": r.explanation.score_reason,
                 "Flags": len(r.review_flags),
             }
             for r in rows

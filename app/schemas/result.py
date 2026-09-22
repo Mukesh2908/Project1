@@ -96,6 +96,10 @@ class SkillFit(BaseModel):
 class Explanation(BaseModel):
     summary: str = ""
     summary_source: str = "template"  # template | llm
+    #: One line saying why this score is what it is — the dimension that
+    #: earned the most and the ones that cost the most. Built from the facts,
+    #: never by a model, so it can sit beside the number in a list.
+    score_reason: str = ""
     why_not_higher: list[dict] = Field(default_factory=list)
     path_to_deployable: list[str] = Field(default_factory=list)
     requires_verification: list[str] = Field(default_factory=list)

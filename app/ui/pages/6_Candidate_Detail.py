@@ -42,6 +42,7 @@ st.caption(
     f"JD primary: {', '.join(facts['jd_primary']) or '—'} · "
     f"Candidate primary: {facts['candidate_primary'] or '—'} · Lane: {facts['lane']}"
 )
+st.markdown(f"**Why this score:** {result.explanation.score_reason}")
 st.info(result.explanation.summary, icon="📋")
 if result.explanation.summary_source == "template":
     st.caption("Summary generated from the facts table, not by a model.")

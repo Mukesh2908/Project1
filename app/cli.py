@@ -119,6 +119,7 @@ def cmd_match(args: argparse.Namespace) -> int:
             f"confidence {result_row.analysis_confidence:3}%"
             + ("  [review]" if result_row.review_flags else "")
         )
+        print(f"  {'':24} {result_row.explanation.score_reason}")
     for exclusion in run.excluded:
         print(f"  {exclusion.display_name:24} excluded — {exclusion.reason}")
 

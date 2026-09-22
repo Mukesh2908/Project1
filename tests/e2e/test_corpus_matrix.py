@@ -11,6 +11,7 @@ Invariants are asserted over every result rather than eyeballed, so a
 regression anywhere in the matrix fails the build.
 """
 
+import re
 from pathlib import Path
 
 import pytest
@@ -325,3 +326,50 @@ def test_score_all_false_restores_the_old_exclusion_behaviour(corpus):
     wide = run_match(profiles, jd, weights, EquivalenceStore(), score_all=True)
     assert narrow.scored_count < wide.scored_count
     assert all(r.prefilter_passed for r in narrow.results)
+
+
+def test_every_result_carries_a_score_reason(corpus):
+    """The reason sits beside the score in a list, so it must always exist."""
+    _profiles, runs = corpus
+    for name, (_jd, _w, run) in runs.items():
+        for result in run.results:
+            assert result.explanation.score_reason, f"{name}/{result.display_name}"
+
+
+def test_the_score_reason_is_grounded_in_the_facts(corpus):
+    """It may only name skills and dimensions the result actually holds."""
+    _profiles, runs = corpus
+    for name, (_jd, _w, run) in runs.items():
+        for result in run.results:
+            reason = result.explanation.score_reason
+            known = {s["skill"] for s in result.facts["skills"]}
+            known |= {s["matched_skill"] for s in result.facts["skills"] if s["matched_skill"]}
+            known |= {d["label"] for d in result.facts["dimensions"]}
+            for token in re.findall(r"[A-Z][A-Za-z.+#]{2,}", reason):
+                if token in {
+                    "No",
+                    "Primary",
+                    "Core",
+                    "Secondary",
+                    "Project",
+                    "Relevant",
+                    "Certification",
+                    "Education",
+                    "Role",
+                    "Domain",
+                }:
+                    continue
+                assert any(token in item for item in known), (
+                    f"{name}/{result.display_name}: {token!r} not in facts — {reason}"
+                )
+
+
+def test_the_score_reason_never_contradicts_the_verdict(corpus):
+    _profiles, runs = corpus
+    for name, (_jd, _w, run) in runs.items():
+        for result in run.results:
+            reason = result.explanation.score_reason
+            if "under the" in reason and "gate" in reason:
+                assert not result.gate_passed, f"{name}/{result.display_name}"
+            if result.gate_passed:
+                assert "under the" not in reason, f"{name}/{result.display_name}"

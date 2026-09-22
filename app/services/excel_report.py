@@ -183,8 +183,7 @@ def _comparison(book, fmt, run: RunResult, use_real_names: bool) -> None:
         "Experience",
         "Certification",
         "Domain",
-        "Main Strength",
-        "Main Gap",
+        "Why this score",
         "Flags",
     ]
     _write_header(sheet, fmt, headers, [16, 12, 18, 12, 16, 18, 13, 10, 10, 12, 12, 10, 30, 36, 30])
@@ -192,12 +191,6 @@ def _comparison(book, fmt, run: RunResult, use_real_names: bool) -> None:
     for index, result in enumerate(run.results, start=1):
         facts = result.facts
         name = result.display_name if use_real_names else result.profile_id
-        strength = result.explanation.strengths[0] if result.explanation.strengths else "—"
-        gap = (
-            result.explanation.why_not_higher[0]["dimension"]
-            if result.explanation.why_not_higher
-            else "—"
-        )
         sheet.write(index, 0, name, fmt["cell"])
         sheet.write(index, 1, result.match_score, fmt["num"])
         sheet.write(index, 2, _verdict_cell(result.verdict), fmt[f"verdict_{result.verdict}"])
@@ -224,9 +217,8 @@ def _comparison(book, fmt, run: RunResult, use_real_names: bool) -> None:
                 "N/A" if score is None else round(score, 1),
                 fmt["cell"] if score is None else fmt["num"],
             )
-        sheet.write(index, 12, strength, fmt["wrap"])
-        sheet.write(index, 13, gap, fmt["wrap"])
-        sheet.write(index, 14, "; ".join(result.review_flags[:2]), fmt["wrap"])
+        sheet.write(index, 12, result.explanation.score_reason, fmt["wrap"])
+        sheet.write(index, 13, "; ".join(result.review_flags[:2]), fmt["wrap"])
         sheet.write_url(index, 0, "internal:Evidence!A1", string=name)
 
     if run.results:

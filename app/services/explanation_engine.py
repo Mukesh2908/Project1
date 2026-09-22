@@ -292,6 +292,72 @@ def validate_summary(summary: str, facts: dict) -> tuple[bool, str]:
     return True, ""
 
 
+def score_reason(facts: dict) -> str:
+    """Why this score, in one line, for display beside the number.
+
+    A ranked list is unreadable if the only way to learn why someone scored
+    60% rather than 88% is to open their detail page. Two halves, each
+    carrying information the other does not: how the primary skill did, which
+    is what the gate turns on, and which *other* dimensions cost the most.
+
+    The primary dimension is deliberately excluded from the gaps half. Listing
+    it in both reads as self-contradictory — "Primary skill 94% ... lost most
+    to Primary skill" — and its shortfall is already implied by the fit
+    percentage stated first.
+    """
+    primaries = [s for s in facts["skills"] if s["tier"] == "primary"]
+    gate = facts["gate_threshold"]
+
+    # A failed gate is the whole story; nothing below it changes the outcome.
+    if not facts["gate_passed"] and primaries:
+        missing = [s for s in primaries if s["fit"] == 0]
+        if missing:
+            names = ", ".join(s["skill"] for s in missing)
+            held = [s for s in primaries if s["fit"] > 0]
+            if held:
+                # A dual-primary role where one half is proven and the other
+                # absent. Saying the score came from "other dimensions alone"
+                # would be plainly wrong when they hold one of the primaries.
+                have = ", ".join(f"{s['skill']} {s['fit']:.0f}%" for s in held)
+                return f"No {names} evidence; has {have} — this role needs both"
+            return (
+                f"No {names} evidence — {facts['match_score']:.1f}% comes from the "
+                "other dimensions alone"
+            )
+        weakest = min(primaries, key=lambda s: s["fit"])
+        via = ""
+        if weakest["relation"] in ("related", "equivalent"):
+            via = f" (via {weakest['matched_skill']})"
+        return f"{weakest['skill']} {weakest['fit']}%{via} is under the {gate:g}% gate"
+
+    parts: list[str] = []
+    if primaries:
+        parts.append(
+            ", ".join(
+                f"{s['skill']} {s['fit']:.0f}%"
+                + (
+                    f" (via {s['matched_skill']})"
+                    if s["relation"] in ("related", "equivalent")
+                    else ""
+                )
+                for s in primaries
+            )
+        )
+    else:
+        ranked = sorted(facts["dimensions"], key=lambda d: -d["contribution"])
+        if ranked:
+            parts.append(f"{ranked[0]['label']} {ranked[0]['score']:.0f}%")
+
+    gaps = [row for row in why_not_higher(facts) if row["dimension"] != "Primary skill"][:2]
+    if gaps:
+        parts.append(
+            "biggest gaps: "
+            + ", ".join(f"{row['dimension']} \u2212{row['lost']:.1f}" for row in gaps)
+        )
+
+    return " · ".join(parts) or "No scored dimensions"
+
+
 def build_explanation(facts: dict, summary: str | None = None) -> Explanation:
     """Assemble the explanation, falling back to the template when needed."""
     source = "template"
@@ -304,6 +370,7 @@ def build_explanation(facts: dict, summary: str | None = None) -> Explanation:
     return Explanation(
         summary=text,
         summary_source=source,
+        score_reason=score_reason(facts),
         why_not_higher=why_not_higher(facts),
         path_to_deployable=path_to_deployable(facts),
         requires_verification=requires_verification(facts),
