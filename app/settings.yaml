@@ -1,0 +1,51 @@
+# Profile Match Engine — runtime settings (project.md section 19.3)
+
+privacy:
+  # dummy_data_only : any configured provider, free tiers included — fixtures only
+  # approved_cloud  : only providers in approved_providers — real employee profiles
+  mode: dummy_data_only
+  mask_pii: true
+  approved_providers: []          # populated once the company approves (D3/D12)
+  retention_months: 12
+
+llm:
+  profile_parser:    groq/llama-3.3-70b-versatile
+  jd_analyzer:       gemini/gemini-2.5-flash
+  equivalence_judge: gemini/gemini-2.5-flash
+  reason_writer:     groq/llama-3.3-70b-versatile
+  fallbacks:
+    - nvidia_nim/meta/llama-3.3-70b-instruct
+    - openai/gpt-4o-mini
+  temperature: 0.0
+  max_retries: 3
+
+embeddings:
+  provider: local                 # local | gemini | openai
+  model: BAAI/bge-small-en-v1.5
+
+scoring:
+  skill_proof_parts:
+    depth: 0.25
+    years: 0.20
+    projects: 0.20
+    recency: 0.15
+    production: 0.10
+    ownership: 0.10
+  gate_enabled: true
+  gate_threshold: 0.60
+  trainable_threshold: 0.25
+  deployable_threshold: 0.80
+  listed_only_cap: 0.10
+  borderline_band: 3.0
+  tier_skill_cap: 5
+  primary_weight_floor: 35
+  primary_weight_warn: 40
+  match_factors:
+    exact: 1.0
+    equivalent: 0.8
+    related: 0.5
+  importance_multipliers:
+    mandatory: 3.0
+    important: 2.0
+    preferred: 1.0
+    optional: 0.5

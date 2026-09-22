@@ -274,3 +274,22 @@ outside the UI entirely.
 | Verdicts signalled by colour alone | Icon + text label alongside colour, in UI and Excel (§17.3) |
 | Reason Writer had no check against §2.8's factual-language rule | Forbidden-phrase lint in the validator (§13.2) |
 | Similar-JD reuse applied past overrides with a yes/no prompt | Shows a diff of what differs before applying (§8.1) |
+
+---
+
+## Found while building it
+
+Three further contradictions surfaced only once the spec was executable. All
+three are fixed in the code and recorded in `project.md`.
+
+| Contradiction | Resolution |
+|---|---|
+| §12.1 required "minimum years met" for a mandatory skill, but §13.5 shows C-014 as Deployable Now with 3.5 years against a 4-year React requirement — the rule makes its own example impossible | Only a user-set `min_years` (§9.3) gates. The JD's inferred `required_years` is already inside the fit score, so gating on it double-counts and fails a 97.5% candidate over half a year |
+| §8.4 gives a same-family bonus and §8.5 tiers same-family skills as Core, which together make Angular a *Core* skill on a React role — while §9.1's own screen shows Angular as Secondary at 0 | Skills the taxonomy marks `related` to the primary are substitutes, not complements: no family bonus, and they stay Secondary |
+| `dual_primary_mode: any` was inert — the gate passed on one primary and the other immediately blocked the verdict through the mandatory check, so no candidate could ever reach Deployable Now on an either/or JD | A primary the gate excused is also excused from the mandatory check |
+
+Also measured rather than assumed: **the writing-style effect is 8.3 points**
+(§23.3). A matched pair differing only in voice scores 91.5% and 83.2%. Both
+still land on the same verdict, so the confound is real but not currently
+decision-changing on this pair — which is exactly the kind of claim that needed
+a number rather than an argument.

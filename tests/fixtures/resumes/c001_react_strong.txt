@@ -1,0 +1,34 @@
+Priya Raghavan
+priya.raghavan@example.com | +91 98765 43211
+Address: 4th Cross, Indiranagar, Bengaluru
+
+PROFESSIONAL SUMMARY
+Frontend engineer with 4 years of React experience building customer-facing
+banking applications.
+
+TECHNICAL SKILLS
+Languages: JavaScript, TypeScript; Frameworks: React, Redux; Databases: SQL
+
+PROJECTS
+Project 1: Retail Banking Portal
+Client: A large private bank
+Jan 2022 - Present
+Tech stack: React, TypeScript, Redux, SQL
+- Built a component library used by 4 apps across the retail portal
+- Cut page load 40% with memoization and code-splitting in production
+- Migrated 120 components from JavaScript to TypeScript
+- Owned the design of the state management layer and mentored two juniors
+
+Project 2: Insurance Claims Dashboard
+Client: An insurance provider
+Mar 2020 - Dec 2021
+Tech stack: React, Redux, SQL
+- Developed claims dashboard screens used by 300 branch staff daily
+- Used Redux for cart state and claim workflow state
+- Wrote stored procedures and CTEs for the claims reporting extract
+
+EDUCATION
+B.Tech, Computer Science, Anna University
+
+CERTIFICATIONS
+AWS Certified Developer - Associate, 2023

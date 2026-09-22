@@ -450,7 +450,12 @@ TypeScript   2 bullets +16 · Strong +15 · Same family +10                     
   (React + Node.js full stack). How the gate treats a dual primary is a per-JD
   choice — see §12.1 and D5.
 - **Core** — in at least one responsibility bullet, or same family as primary,
-  or essential supporting tech.
+  or essential supporting tech. **Competing frameworks are excluded**: a skill
+  the taxonomy marks `related` to the primary is a substitute for it, not a
+  complement, so Angular on a React role stays Secondary and gets no
+  same-family bonus. Read literally, §8.4's family bonus and this rule would
+  tier Angular as Core on a React JD, which contradicts §9.1's own worked
+  screen showing it Secondary at 0.
 - **Secondary** — everything else. Never compensates for a missing primary.
 
 ### 8.6 Importance — separate from tier
@@ -834,9 +839,22 @@ else:
 # a human-review flag is added on top of any verdict when §12.3 triggers
 ```
 
-**Mandatory met** = skill fit ≥ gate threshold, required certification held,
-minimum years met. Secondary skills and certifications cannot lift anyone past a
-failed gate.
+**Mandatory met** = skill fit ≥ gate threshold, required certification held, and
+any **user-set minimum years** met. Secondary skills and certifications cannot
+lift anyone past a failed gate.
+
+> **Which "years" gates (corrected).** Only a floor the user sets explicitly in
+> My Requirements (§9.3) gates the verdict. The JD's *inferred* `required_years`
+> does not: it is already inside `years_part` of the fit score, so checking it
+> again both double-counts the same gap and fails a 97.5% candidate over half a
+> year. v2.0 conflated the two, which made its own §13.5 example impossible —
+> C-014 is shown as Deployable Now with 3.5 years against a 4-year requirement.
+
+> **Dual primary and the mandatory check.** When `dual_primary_mode` is `any`,
+> a primary the gate let through must also be excused from the mandatory check.
+> Otherwise the mode is inert: the gate passes on one primary and the other
+> immediately blocks the verdict, so no candidate could reach Deployable Now on
+> an either/or JD.
 
 **Dual primary (D5).** `dual_primary_mode` lives on the JD config and is
 surfaced on the JD Review screen whenever a second primary is detected:
@@ -1721,6 +1739,13 @@ Directly targets the confound in §7.2 and §20.5, and needs no second rater:
 A failure here means the engine is scoring prose rather than proof. Start the
 tolerance generous, measure what it actually is, then tighten it — the first run
 is a measurement, not a pass/fail.
+
+**Measured on the shipped fixtures: 8.3 points.** A matched pair with identical
+facts, dates and projects, differing only in voice ("Built a component library"
+versus "We built a component library"), scores 91.5% and 83.2%. Both still reach
+the same verdict, so the effect is real but not currently decision-changing on
+this pair. The test holds the tolerance at 12 points; tighten it as the parser
+improves, and never loosen it to make a build pass.
 
 ### 23.4 Adverse-impact check
 

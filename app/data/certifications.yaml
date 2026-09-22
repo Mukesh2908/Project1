@@ -1,0 +1,32 @@
+certifications:
+  AWS Certified Developer:
+    issuer: Amazon Web Services
+    synonyms: [AWS Certified Developer - Associate, AWS Developer Associate]
+    validity_years: 3
+  AWS Certified Solutions Architect:
+    issuer: Amazon Web Services
+    synonyms: [AWS Solutions Architect, AWS SAA]
+    validity_years: 3
+  Azure Developer Associate:
+    issuer: Microsoft
+    synonyms: [AZ-204, Microsoft Certified Azure Developer]
+    validity_years: 1
+  Azure Data Engineer Associate:
+    issuer: Microsoft
+    synonyms: [DP-203]
+    validity_years: 1
+  Databricks Certified Data Engineer Associate:
+    issuer: Databricks
+    synonyms: [Databricks Data Engineer Associate]
+    validity_years: 2
+  Oracle Certified Professional Java:
+    issuer: Oracle
+    synonyms: [OCPJP, OCJP]
+    validity_years: null
+  Certified Kubernetes Administrator:
+    issuer: CNCF
+    synonyms: [CKA]
+    validity_years: 3
+
+equivalents:
+  - [AWS Certified Developer, Azure Developer Associate]

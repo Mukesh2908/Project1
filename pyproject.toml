@@ -1,0 +1,42 @@
+[project]
+name = "profile-match-engine"
+version = "0.1.0"
+description = "JD-driven, evidence-based, user-controlled profile matching"
+requires-python = ">=3.11"
+dependencies = [
+    "pydantic>=2.6",
+    "sqlalchemy>=2.0",
+    "alembic>=1.13",
+    "pyyaml>=6.0",
+    "python-dateutil>=2.9",
+    "rapidfuzz>=3.6",
+    "pandas>=2.2",
+    "xlsxwriter>=3.2",
+    "streamlit>=1.40",
+]
+
+[project.optional-dependencies]
+llm = ["litellm>=1.50", "instructor>=1.5"]
+parsing = ["pymupdf>=1.24", "python-docx>=1.1", "dateparser>=1.2"]
+pii = ["presidio-analyzer>=2.2", "presidio-anonymizer>=2.2", "spacy>=3.7"]
+vectors = ["chromadb>=0.5", "sentence-transformers>=3.0"]
+dev = ["pytest>=8.0", "hypothesis>=6.100", "ruff>=0.6"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["app*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+filterwarnings = ["ignore::DeprecationWarning"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+ignore = ["E501"]

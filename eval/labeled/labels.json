@@ -1,0 +1,28 @@
+{
+  "note": "Self-authored labels (decision D1). Expand toward 10 JDs x 20 profiles per project.md 23.2. Every review action in the app appends to review_actions.jsonl and is a candidate for promotion into this file.",
+  "cases": [
+    {
+      "jd": "tests/fixtures/jds/jd001_react_senior.txt",
+      "expected_primary": "React",
+      "profiles": [
+        "tests/fixtures/resumes/c001_react_strong.txt",
+        "tests/fixtures/resumes/c002_angular_adjacent.txt",
+        "tests/fixtures/resumes/c003_java_keyword_stuffed.txt",
+        "tests/fixtures/resumes/c004_undated_teamvoice.txt",
+        "tests/fixtures/resumes/c005_stale_stackline.txt"
+      ],
+      "expected_order": [
+        "c001_react_strong.txt",
+        "c004_undated_teamvoice.txt",
+        "c002_angular_adjacent.txt",
+        "c005_stale_stackline.txt",
+        "c003_java_keyword_stuffed.txt"
+      ],
+      "expected_verdicts": {
+        "c001_react_strong.txt": "deployable_now",
+        "c002_angular_adjacent.txt": "trainable",
+        "c003_java_keyword_stuffed.txt": "not_a_fit"
+      }
+    }
+  ]
+}

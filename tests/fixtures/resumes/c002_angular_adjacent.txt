@@ -1,0 +1,25 @@
+Arun Mehta
+arun.mehta@example.com | +91 90000 11111
+
+PROFESSIONAL SUMMARY
+Frontend developer focused on Angular applications.
+
+TECHNICAL SKILLS
+Angular, TypeScript, RxJS, SQL
+
+PROJECTS
+Project 1: Telecom Self-Care Portal
+Jan 2021 - Present
+Tech stack: Angular, TypeScript, SQL
+- Built and optimised the self-care portal used by 2M subscribers in production
+- Designed the component architecture and reviewed pull requests for the team
+- Tuned change detection to cut render time by 35%
+
+Project 2: Billing Admin Console
+Feb 2019 - Dec 2020
+Tech stack: Angular, SQL
+- Developed admin console screens for billing operations
+- Wrote window functions for the billing reconciliation report
+
+EDUCATION
+B.E., Information Science, Visvesvaraya Technological University

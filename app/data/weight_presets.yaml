@@ -1,0 +1,70 @@
+# Starting points only. The primary mechanism is the JD-derived matrix
+# (project.md section 11.2, decision D8). Every preset here totals exactly 100 —
+# tests/scoring/test_weights.py asserts it, because the v2.0 presets did not.
+
+presets:
+  skills_first:
+    name: Skills-first
+    is_default: true
+    weights:
+      primary_skill: 55
+      core_skills: 25
+      secondary_skills: 10
+      project_experience: 0
+      relevant_experience: 0
+      certification: 0
+      education: 0
+      role_seniority: 5
+      domain_fit: 5
+
+  balanced:
+    name: Balanced
+    weights:
+      primary_skill: 35
+      core_skills: 20
+      secondary_skills: 5
+      project_experience: 15
+      relevant_experience: 10
+      certification: 5
+      education: 0
+      role_seniority: 5
+      domain_fit: 5
+
+  project_heavy:
+    name: Project-heavy
+    weights:
+      primary_skill: 40
+      core_skills: 18
+      secondary_skills: 0
+      project_experience: 20
+      relevant_experience: 7
+      certification: 7
+      education: 0
+      role_seniority: 4
+      domain_fit: 4
+
+  certification_led:
+    name: Certification-led
+    weights:
+      primary_skill: 30
+      core_skills: 14
+      secondary_skills: 4
+      project_experience: 9
+      relevant_experience: 9
+      certification: 22
+      education: 4
+      role_seniority: 4
+      domain_fit: 4
+
+  domain_critical:
+    name: Domain-critical
+    weights:
+      primary_skill: 30
+      core_skills: 14
+      secondary_skills: 4
+      project_experience: 13
+      relevant_experience: 9
+      certification: 4
+      education: 0
+      role_seniority: 4
+      domain_fit: 22

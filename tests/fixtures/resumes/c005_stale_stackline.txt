@@ -1,0 +1,20 @@
+Vikram Desai
+vikram.desai@example.com | +91 99887 76655
+
+PROFESSIONAL SUMMARY
+Support engineer.
+
+TECHNICAL SKILLS
+React, Java, SQL, Python
+
+PROJECTS
+Project 1: Legacy Portal Support
+Mar'15 - Dec'18
+Tech stack: React, SQL
+- Handled production support tickets for the legacy portal
+- Ran data check queries to investigate reported issues
+
+Project 2: Reporting Support
+Jan'19 - Feb'20
+Tech stack: SQL
+- Supported the reporting platform and triaged user issues

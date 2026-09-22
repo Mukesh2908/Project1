@@ -1,0 +1,34 @@
+Meena Ramasubramanian
+meena.r@example.com | +91 98765 43211
+Address: 4th Cross, Indiranagar, Bengaluru
+
+PROFESSIONAL SUMMARY
+Frontend engineer with 4 years of React experience building customer-facing
+banking applications.
+
+TECHNICAL SKILLS
+Languages: JavaScript, TypeScript; Frameworks: React, Redux; Databases: SQL
+
+PROJECTS
+Project 1: Retail Banking Portal
+Client: A large private bank
+Jan 2022 - Present
+Tech stack: React, TypeScript, Redux, SQL
+- We built a component library that was used by four applications in the portal
+- The team cut page load times by 40% using memoization and code splitting
+- We were involved in migrating 120 components from JavaScript to TypeScript
+- The team owned the design of the state management layer
+
+Project 2: Insurance Claims Dashboard
+Client: An insurance provider
+Mar 2020 - Dec 2021
+Tech stack: React, Redux, SQL
+- We developed claims dashboard screens used by 300 branch staff daily
+- The team used Redux for cart state and claim workflow state
+- We wrote stored procedures and CTEs for the claims reporting extract
+
+EDUCATION
+B.Tech, Computer Science, Anna University
+
+CERTIFICATIONS
+AWS Certified Developer - Associate, 2023

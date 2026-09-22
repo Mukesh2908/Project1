@@ -1,0 +1,24 @@
+Meera Iyer
+meera.iyer@example.com
+
+PROFESSIONAL SUMMARY
+Frontend engineer.
+
+TECHNICAL SKILLS
+React, TypeScript, Redux
+
+PROJECTS
+Project 1: Wealth Management Portal
+Tech stack: React, TypeScript, Redux
+- We built a component library that was used by four applications
+- The team cut page load times by 40% using memoization and code splitting
+- We were involved in migrating 120 components from JavaScript to TypeScript
+- The team owned the design of the state management layer
+
+Project 2: Advisor Dashboard
+Tech stack: React, Redux
+- We developed dashboard screens for relationship managers
+- The team was involved in the Redux state design
+
+EDUCATION
+B.Sc., Computer Science

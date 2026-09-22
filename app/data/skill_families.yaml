@@ -1,0 +1,95 @@
+# Skill taxonomy — editable without code changes (project.md section 18.3).
+# Changing this file changes scores, so its hash is stored per run as
+# taxonomy_version and printed on the Excel Audit sheet.
+
+skills:
+  React:              {group: frontend, synonyms: [ReactJS, React.js, React JS]}
+  Next.js:            {group: frontend, synonyms: [NextJS, Next JS]}
+  TypeScript:         {group: frontend, synonyms: [TS]}
+  JavaScript:         {group: frontend, synonyms: [JS, ES6, ECMAScript]}
+  Redux:              {group: frontend, synonyms: [Redux Toolkit, RTK]}
+  Angular:            {group: frontend, synonyms: [AngularJS, Angular 2+]}
+  Vue:                {group: frontend, synonyms: [Vue.js, VueJS]}
+  HTML:               {group: frontend, synonyms: [HTML5]}
+  CSS:                {group: frontend, synonyms: [CSS3, SCSS, Sass]}
+  Java:               {group: backend_java}
+  Spring Boot:        {group: backend_java, synonyms: [Spring, SpringBoot]}
+  Hibernate:          {group: backend_java, synonyms: [JPA]}
+  Python:             {group: backend_python, synonyms: [Python3]}
+  Django:             {group: backend_python}
+  FastAPI:            {group: backend_python}
+  Flask:              {group: backend_python}
+  Node.js:            {group: backend_node, synonyms: [NodeJS, Node]}
+  Express:            {group: backend_node, synonyms: [Express.js, ExpressJS]}
+  SQL:
+    group: data
+    synonyms: [T-SQL, PL/SQL, TSQL, ANSI SQL]
+    implied_by: [stored procedure, stored procedures, cte, ctes, window function,
+                 window functions, query tuning, query optimization, index tuning]
+  PostgreSQL:         {group: data, synonyms: [Postgres]}
+  MySQL:              {group: data}
+  Oracle:             {group: data, synonyms: [Oracle DB]}
+  MongoDB:            {group: data, synonyms: [Mongo]}
+  Azure Data Factory: {group: data_engineering, synonyms: [ADF]}
+  AWS Glue:           {group: data_engineering, synonyms: [Glue]}
+  Databricks:
+    group: data_engineering
+    implied_by: [delta merge, delta merges, delta lake, notebooks]
+  PySpark:            {group: data_engineering, synonyms: [Spark, Apache Spark]}
+  Azure Synapse:      {group: data_engineering, synonyms: [Synapse]}
+  Snowflake:          {group: data_engineering}
+  Kafka:              {group: data_engineering, synonyms: [Apache Kafka]}
+  Airflow:            {group: data_engineering, synonyms: [Apache Airflow]}
+  AWS:                {group: cloud, synonyms: [Amazon Web Services]}
+  Azure:              {group: cloud, synonyms: [Microsoft Azure]}
+  GCP:                {group: cloud, synonyms: [Google Cloud]}
+  Docker:             {group: devops}
+  Kubernetes:         {group: devops, synonyms: [K8s]}
+  Jenkins:            {group: devops}
+  Terraform:          {group: devops}
+  Scala:              {group: backend_jvm}
+  Selenium:           {group: qa}
+  Cypress:            {group: qa}
+
+# Cross-family credit. Anything not listed here and not a synonym is "none".
+relations:
+  - [React, Angular, related]
+  - [React, Vue, related]
+  - [Angular, Vue, related]
+  - [React, Next.js, equivalent]
+  - [TypeScript, JavaScript, equivalent]
+  - [Azure Data Factory, AWS Glue, equivalent]
+  - [Azure Synapse, Snowflake, related]
+  - [PostgreSQL, MySQL, equivalent]
+  - [PostgreSQL, Oracle, equivalent]
+  - [Databricks, PySpark, related]
+  - [AWS, Azure, related]
+  - [AWS, GCP, related]
+  - [Azure, GCP, related]
+  - [Django, Flask, equivalent]
+  - [Django, FastAPI, equivalent]
+  - [Flask, FastAPI, equivalent]
+  - [Spring Boot, Hibernate, related]
+  - [Node.js, Express, equivalent]
+
+# Role families, and which are adjacent for the role-fit dimension.
+role_families:
+  frontend_dev:   {adjacent: [fullstack_dev, mobile_dev]}
+  backend_dev:    {adjacent: [fullstack_dev, data_engineer]}
+  fullstack_dev:  {adjacent: [frontend_dev, backend_dev]}
+  data_engineer:  {adjacent: [backend_dev, data_analyst]}
+  data_analyst:   {adjacent: [data_engineer]}
+  devops:         {adjacent: [backend_dev]}
+  qa:             {adjacent: [backend_dev, frontend_dev]}
+  mobile_dev:     {adjacent: [frontend_dev]}
+
+domains:
+  BFSI:       {adjacent: [Fintech, Insurance]}
+  Fintech:    {adjacent: [BFSI]}
+  Insurance:  {adjacent: [BFSI]}
+  Healthcare: {adjacent: [Pharma]}
+  Pharma:     {adjacent: [Healthcare]}
+  Retail:     {adjacent: [Ecommerce]}
+  Ecommerce:  {adjacent: [Retail]}
+  Telecom:    {adjacent: []}
+  Manufacturing: {adjacent: []}
