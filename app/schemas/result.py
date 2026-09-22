@@ -117,6 +117,12 @@ class MatchResult(BaseModel):
     skill_fits: list[SkillFit] = Field(default_factory=list)
     verdict: Verdict = "not_a_fit"
     gate_passed: bool = False
+    #: Whether the candidate showed any trace of the JD's primary skill. False
+    #: means they were scored anyway (every candidate gets a number) but had
+    #: no primary-skill evidence at all, so the score reflects the other
+    #: dimensions only.
+    prefilter_passed: bool = True
+    prefilter_note: str = ""
     analysis_confidence: int = 100
     review_flags: list[str] = Field(default_factory=list)
     facts: dict = Field(default_factory=dict)

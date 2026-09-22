@@ -252,3 +252,76 @@ def test_rerank_of_120_profiles_is_well_under_a_second(corpus):
     start = time.perf_counter()
     compare_matrices(run.results, weights, weights)
     assert time.perf_counter() - start < 1.0
+
+
+# -- every candidate gets a score -------------------------------------------
+
+
+def test_every_parseable_candidate_is_scored(corpus):
+    """The primary-skill pre-filter no longer withholds a score.
+
+    It was specified as a cheap filter to save LLM cost, but scoring makes no
+    LLM calls (project.md 2.5), so it saved milliseconds and cost most of the
+    pool any number at all. Only a profile that could not be parsed is still
+    excluded, because there is genuinely nothing to score.
+    """
+    profiles, runs = corpus
+    parseable = [p for p in profiles if p.status != "excluded"]
+    for name, (_jd, _w, run) in runs.items():
+        assert run.scored_count == len(parseable), (
+            f"{name}: scored {run.scored_count} of {len(parseable)} parseable profiles"
+        )
+
+
+def test_only_unparseable_profiles_are_excluded(corpus):
+    profiles, runs = corpus
+    unparseable = {p.profile_id for p in profiles if p.status == "excluded"}
+    for name, (_jd, _w, run) in runs.items():
+        assert {e.profile_id for e in run.excluded} == unparseable, name
+
+
+def test_candidates_without_primary_evidence_are_flagged_and_score_low(corpus):
+    """They still get a number, but it must be clearly poor and marked."""
+    _profiles, runs = corpus
+    for name, (_jd, _w, run) in runs.items():
+        no_evidence = [r for r in run.results if not r.prefilter_passed]
+        for result in no_evidence:
+            assert result.verdict == "not_a_fit", f"{name}/{result.display_name}"
+            assert result.match_score < 30, (
+                f"{name}/{result.display_name} scored {result.match_score} "
+                "with no primary-skill evidence"
+            )
+            assert result.prefilter_note, "the reason must be carried for display"
+
+
+def test_meaningful_primary_evidence_outranks_none(corpus):
+    """Widening the pool must not let a no-evidence candidate jump a real one.
+
+    The bar is *meaningful* evidence, not any evidence: a bare skills-list
+    mention is capped at 10% precisely because it is worth almost nothing
+    (project.md G2), so it carries no promise of outranking someone who scores
+    a fraction higher on the other dimensions. Both are Not a Fit either way.
+    """
+    _profiles, runs = corpus
+    for name, (_jd, weights, run) in runs.items():
+        cap = weights.listed_only_cap * 100
+        real = [
+            i
+            for i, r in enumerate(run.results)
+            if r.prefilter_passed and (r.dimension_scores.get("primary_skill") or 0) > cap
+        ]
+        none = [i for i, r in enumerate(run.results) if not r.prefilter_passed]
+        if real and none:
+            assert max(real) < min(none), (
+                f"{name}: a candidate with no primary evidence outranked one with "
+                "evidence above the listed-only cap"
+            )
+
+
+def test_score_all_false_restores_the_old_exclusion_behaviour(corpus):
+    profiles, runs = corpus
+    jd, weights, _run = runs["jd_react_senior"]
+    narrow = run_match(profiles, jd, weights, EquivalenceStore(), score_all=False)
+    wide = run_match(profiles, jd, weights, EquivalenceStore(), score_all=True)
+    assert narrow.scored_count < wide.scored_count
+    assert all(r.prefilter_passed for r in narrow.results)

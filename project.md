@@ -907,13 +907,30 @@ The queue shows the reason for each item. The manager can **Confirm**,
 **Change verdict** (with a note), or **Dismiss** — all logged for audit and fed
 into the eval set.
 
-### 12.4 Stage 1 filtering is visible
+### 12.4 Every candidate gets a score
 
-The cheap pre-filter (primary skill plus close family) is deliberately
-recall-oriented: it is meant to skip obvious non-starters, not to make decisions.
-Every run reports how many profiles it excluded, and the excluded list is
-inspectable with the reason. v2.0 left this silent, so a candidate whose React
-evidence was implied through Next.js could disappear with no trace.
+**Changed in v3.1.** Stage 1 no longer withholds a score. It was specified as
+a cheap filter to save LLM cost, but scoring makes no LLM calls at all (§2.5,
+parse once and score many) — on a 120-profile pool it saved roughly 25ms and
+cost three quarters of the pool any number whatsoever.
+
+Every parseable candidate is now scored and ranked. The primary-skill check
+still runs, but it annotates the result (`prefilter_passed`,
+`prefilter_note`) rather than removing it: the UI shows a **Primary evidence**
+column, offers a filter to hide those without it, and the Excel Comparison
+sheet carries the same column. Candidates with no trace of the primary skill
+score on the remaining dimensions alone, which puts them in the low single
+digits and squarely in Not a Fit — visible, ranked, and obviously poor rather
+than silently absent.
+
+`run_match(..., score_all=False)` restores the old exclusion behaviour for a
+pool large enough that the milliseconds matter.
+
+A profile that could not be parsed at all is still excluded, and still
+reported with its reason: there is nothing to score, and a zero would imply a
+judgement that was never made. v2.0 left even that silent, so a candidate
+whose React evidence was implied through Next.js could disappear with no
+trace.
 
 ### 12.5 Naming
 

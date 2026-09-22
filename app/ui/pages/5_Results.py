@@ -38,6 +38,12 @@ with st.sidebar:
     min_primary = st.slider("Minimum primary skill score", 0, 100, 0)
     confidence_filter = st.multiselect("Confidence", ["High", "Medium", "Low"])
     review_only = st.checkbox("Only those needing review")
+    with_primary_only = st.checkbox(
+        "Only candidates with primary-skill evidence",
+        help="Everyone is scored. Tick this to hide candidates with no trace "
+        "of the JD's primary skill — their score comes from the other "
+        "dimensions alone.",
+    )
     search = st.text_input("Search", placeholder="React 3+ years AWS certified")
 
 
@@ -50,6 +56,8 @@ def keep(result) -> bool:
     if confidence_filter and result.confidence_band not in confidence_filter:
         return False
     if review_only and not result.review_flags:
+        return False
+    if with_primary_only and not result.prefilter_passed:
         return False
     if search.strip():
         haystack = " ".join(
@@ -89,6 +97,7 @@ def table(rows) -> pd.DataFrame:
                 "Primary": round(r.dimension_scores.get("primary_skill") or 0, 1),
                 "Core": round(r.dimension_scores.get("core_skills") or 0, 1),
                 "Projects": round(r.dimension_scores.get("project_experience") or 0, 1),
+                "Primary evidence": "yes" if r.prefilter_passed else "none",
                 "Main Strength": (r.explanation.strengths or ["—"])[0],
                 "Main Gap": (
                     r.explanation.why_not_higher[0]["dimension"]
@@ -153,9 +162,16 @@ with tabs[-1]:
 st.divider()
 
 excluded_count = len(results) - len(filtered)
+no_primary = sum(1 for r in filtered if not r.prefilter_passed)
 st.caption(
     f"Showing {len(filtered)} of {len(results)} scored profiles"
-    + (f" ({excluded_count} hidden by filters)." if excluded_count else ".")
+    + (f" ({excluded_count} hidden by filters)" if excluded_count else "")
+    + (
+        f" · {no_primary} have no evidence of the primary skill and are scored "
+        "on the other dimensions alone."
+        if no_primary
+        else "."
+    )
 )
 
 left, right = st.columns([1, 2])

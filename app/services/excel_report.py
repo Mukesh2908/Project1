@@ -175,6 +175,7 @@ def _comparison(book, fmt, run: RunResult, use_real_names: bool) -> None:
         "Match Score",
         "Verdict",
         "Confidence",
+        "Primary evidence",
         "Candidate Primary",
         "Primary Score",
         "Core",
@@ -186,7 +187,7 @@ def _comparison(book, fmt, run: RunResult, use_real_names: bool) -> None:
         "Main Gap",
         "Flags",
     ]
-    _write_header(sheet, fmt, headers, [16, 12, 18, 12, 18, 13, 10, 10, 12, 12, 10, 30, 36, 30])
+    _write_header(sheet, fmt, headers, [16, 12, 18, 12, 16, 18, 13, 10, 10, 12, 12, 10, 30, 36, 30])
 
     for index, result in enumerate(run.results, start=1):
         facts = result.facts
@@ -203,7 +204,8 @@ def _comparison(book, fmt, run: RunResult, use_real_names: bool) -> None:
         sheet.write(
             index, 3, f"{result.analysis_confidence}% ({result.confidence_band})", fmt["cell"]
         )
-        sheet.write(index, 4, facts.get("candidate_primary") or "—", fmt["cell"])
+        sheet.write(index, 4, "yes" if result.prefilter_passed else "none", fmt["cell"])
+        sheet.write(index, 5, facts.get("candidate_primary") or "—", fmt["cell"])
         for column, dimension in enumerate(
             [
                 "primary_skill",
@@ -213,7 +215,7 @@ def _comparison(book, fmt, run: RunResult, use_real_names: bool) -> None:
                 "certification",
                 "domain_fit",
             ],
-            start=5,
+            start=6,
         ):
             score = result.dimension_scores.get(dimension)
             sheet.write(
@@ -222,16 +224,16 @@ def _comparison(book, fmt, run: RunResult, use_real_names: bool) -> None:
                 "N/A" if score is None else round(score, 1),
                 fmt["cell"] if score is None else fmt["num"],
             )
-        sheet.write(index, 11, strength, fmt["wrap"])
-        sheet.write(index, 12, gap, fmt["wrap"])
-        sheet.write(index, 13, "; ".join(result.review_flags[:2]), fmt["wrap"])
+        sheet.write(index, 12, strength, fmt["wrap"])
+        sheet.write(index, 13, gap, fmt["wrap"])
+        sheet.write(index, 14, "; ".join(result.review_flags[:2]), fmt["wrap"])
         sheet.write_url(index, 0, "internal:Evidence!A1", string=name)
 
     if run.results:
         sheet.conditional_format(
             1, 1, len(run.results), 1, {"type": "data_bar", "bar_color": "#5BA88E"}
         )
-        sheet.conditional_format(1, 5, len(run.results), 10, {"type": "3_color_scale"})
+        sheet.conditional_format(1, 6, len(run.results), 11, {"type": "3_color_scale"})
 
 
 def _breakdown(book, fmt, run: RunResult, weights: WeightConfig) -> None:

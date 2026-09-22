@@ -51,11 +51,17 @@ class RunResult:
 def stage1_filter(
     profile: ProfileRecord, jd: JDConfig, store: EquivalenceStore
 ) -> tuple[bool, str]:
-    """Cheap pre-filter on the primary skill and its close family.
+    """Whether the candidate shows any trace of the JD's primary skill.
 
-    Returns (keep, reason). Anything with any trace of the primary — including
-    related technology and a bare skills-list mention — is kept, because the
-    proof engine is what decides how much that trace is worth.
+    Returns (has_trace, reason). Anything at all — related technology, a bare
+    skills-list mention — counts, because the proof engine is what decides
+    how much that trace is worth.
+
+    This is no longer an exclusion. It was specified as a cheap filter to save
+    LLM cost, but scoring makes no LLM calls at all (project.md 2.5, parse
+    once and score many), so on a 120-profile pool it saves roughly 25ms and
+    costs 76 candidates any score whatsoever. It now annotates the result
+    instead, and the UI filters on it.
     """
     primaries = jd.primaries
     if not primaries:
@@ -148,8 +154,16 @@ def run_match(
     store: EquivalenceStore | None = None,
     project_relevance: dict[str, dict[str, float]] | None = None,
     run_id: str | None = None,
+    score_all: bool = True,
 ) -> RunResult:
-    """Score a pool against one JD."""
+    """Score a pool against one JD.
+
+    Every candidate gets a match score by default. Pass ``score_all=False``
+    to drop those with no trace of the primary skill, which is only worth
+    doing on a pool large enough for the milliseconds to matter. A profile
+    that could not be parsed at all is still excluded either way: there is
+    nothing to score, and a zero would imply a judgement that was not made.
+    """
     store = store or EquivalenceStore()
     run_id = run_id or f"RUN-{uuid.uuid4().hex[:8].upper()}"
     run = RunResult(run_id=run_id, weights=weights)
@@ -163,20 +177,21 @@ def run_match(
                 )
             )
             continue
-        keep, reason = stage1_filter(profile, jd, store)
-        if not keep:
+        has_trace, reason = stage1_filter(profile, jd, store)
+        if not has_trace and not score_all:
             run.excluded.append(Exclusion(profile.profile_id, profile.display_name, reason))
             continue
-        run.results.append(
-            score_profile(
-                profile,
-                jd,
-                weights,
-                run_id,
-                store,
-                relevance.get(profile.profile_id),
-            )
+        result = score_profile(
+            profile,
+            jd,
+            weights,
+            run_id,
+            store,
+            relevance.get(profile.profile_id),
         )
+        result.prefilter_passed = has_trace
+        result.prefilter_note = "" if has_trace else reason
+        run.results.append(result)
 
     run.results.sort(key=lambda r: -r.match_score)
     return run
