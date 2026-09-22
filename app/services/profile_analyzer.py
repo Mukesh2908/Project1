@@ -6,6 +6,7 @@ unchanged file costs zero LLM calls.
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass, field
 from datetime import date
 from pathlib import Path
@@ -15,7 +16,7 @@ from pydantic import BaseModel
 from app.ai.provider import AIProvider, CallRecord
 from app.schemas.evidence import ProfileRecord, Project, ProjectSkill
 from app.services import document_parser, evidence_engine, pii_masker, sectioner
-from app.services.skill_engine import family_of, implied_skills, normalise
+from app.services.skill_engine import find_skills, implied_skills, normalise
 
 PROMPT_VERSION = "profile_parser_v1"
 
@@ -248,18 +249,26 @@ def _certification_lines(text: str) -> list[dict]:
 
 
 def _claimed_years(text: str) -> dict[str, float]:
-    """'5 years of React' — what the resume asserts, to compare against evidence."""
-    import re
+    """What the resume asserts, to compare against what it evidences.
 
+    Scans a short window after each "N years" phrase for a known skill rather
+    than capturing a greedy blob and normalising it. The greedy form silently
+    missed the most common phrasing of all — "8 years of React experience"
+    captured "React experience", which is not a taxonomy skill and was
+    dropped. That left section 7.5's claim-vs-evidence flag almost never
+    firing, and Analysis Confidence correspondingly overstated for exactly
+    the candidates who exaggerate.
+    """
     out: dict[str, float] = {}
-    pattern = re.compile(
-        r"(\d{1,2}(?:\.\d)?)\+?\s*(?:\+)?\s*(?:years?|yrs?)(?:\s+of)?\s+(?:experience\s+in\s+|hands[- ]on\s+)?([A-Za-z][\w.+# ]{1,25})",
-        re.I,
-    )
-    for match in pattern.finditer(text):
-        skill = normalise(match.group(2).strip())
-        if family_of(skill):
-            out[skill] = max(out.get(skill, 0.0), float(match.group(1)))
+    pattern = re.compile(r"(\d{1,2}(?:\.\d)?)\s*\+?\s*(?:years?|yrs?)", re.I)
+    for match in pattern.finditer(text or ""):
+        window = text[match.end() : match.end() + 60]
+        # Stop at a sentence break so "8 years of Java. 6 years of React"
+        # does not attribute both figures to the first skill.
+        window = re.split(r"[.;\n]", window)[0]
+        for skill in find_skills(window):
+            claimed = float(match.group(1))
+            out[skill] = max(out.get(skill, 0.0), claimed)
     return out
 
 

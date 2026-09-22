@@ -1,0 +1,19 @@
+Imran Qureshi
+imran.q@example.com
+
+PROFESSIONAL SUMMARY
+Cloud engineer with 9 years.
+
+TECHNICAL SKILLS
+AWS, Terraform, Kubernetes
+
+PROJECTS
+Project 1: Retail Cloud Platform
+Jan 2017 - Present
+Tech stack: AWS, Terraform, Kubernetes
+- Architected AWS platform infrastructure in production
+- Led Terraform module design across the estate
+- Designed Kubernetes cluster topology and mentored engineers
+
+EDUCATION
+B.Tech, Computer Science

@@ -7,6 +7,7 @@ future run with no way to notice or undo it.
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass, field
 from functools import lru_cache
 
@@ -81,6 +82,32 @@ def domain_adjacency() -> dict[str, list[str]]:
 
 def known_skills() -> list[str]:
     return sorted((_taxonomy().get("skills") or {}).keys())
+
+
+def find_skills(text: str) -> dict[str, int]:
+    """Canonical skills named in ``text``, with occurrence counts.
+
+    Matched spans are consumed longest-alias-first, so "Azure Data Factory"
+    claims its whole span and does not also register a bare "Azure". Word
+    boundaries that allow '.' and '+' keep "Java" out of "JavaScript" while
+    still matching real names like Next.js and C++.
+    """
+    lowered = text.lower()
+    index = _synonym_index()
+    spans: list[tuple[int, int, str]] = []
+    for alias in sorted(index, key=len, reverse=True):
+        for match in re.finditer(rf"(?<![\w.]){re.escape(alias)}(?![\w.])", lowered):
+            spans.append((match.start(), match.end(), index[alias]))
+
+    spans.sort(key=lambda s: (-(s[1] - s[0]), s[0]))
+    claimed: list[tuple[int, int]] = []
+    found: dict[str, int] = {}
+    for start, end, canonical in spans:
+        if any(start < c_end and end > c_start for c_start, c_end in claimed):
+            continue
+        claimed.append((start, end))
+        found[canonical] = found.get(canonical, 0) + 1
+    return found
 
 
 def implied_skills(text: str) -> set[str]:

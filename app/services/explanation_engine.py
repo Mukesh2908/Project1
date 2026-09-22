@@ -7,6 +7,8 @@ the same facts before it is shown.
 
 from __future__ import annotations
 
+import re
+
 from app.schemas.enums import DIMENSION_LABELS, FORBIDDEN_PHRASES
 from app.schemas.evidence import ProfileRecord
 from app.schemas.jd import JDConfig
@@ -223,9 +225,21 @@ def validate_summary(summary: str, facts: dict) -> tuple[bool, str]:
         if phrase in lowered:
             return False, f"forbidden phrasing: {phrase!r}"
 
-    known = {s["skill"].lower() for s in facts["skills"]}
-    known |= {(facts.get("candidate_primary") or "").lower()}
-    import re
+    # Multi-word skill names have to contribute their individual words, not
+    # just the full name: the token scan below sees "Azure", "Data" and
+    # "Factory" separately, so checking only against "azure data factory"
+    # rejects a perfectly grounded summary as invented. That silently
+    # discarded the model's summary for every multi-word skill — Azure Data
+    # Factory, Spring Boot, AWS Glue, Delta Lake — and fell back to the
+    # template without saying why.
+    known: set[str] = set()
+    for entry in facts["skills"]:
+        name = entry["skill"].lower()
+        known.add(name)
+        known.update(name.split())
+    primary = (facts.get("candidate_primary") or "").lower()
+    known.add(primary)
+    known.update(primary.split())
 
     for token in re.findall(r"\b[A-Z][A-Za-z.+#]{2,}\b", summary):
         if token.lower() in {

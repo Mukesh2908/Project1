@@ -1,0 +1,18 @@
+Nikhil Rao
+nikhil.r@example.com
+
+PROFESSIONAL SUMMARY
+Java developer.
+
+TECHNICAL SKILLS
+Java, SQL
+
+PROJECTS
+Project 1: Internal HR Tool
+Aug 2023 - Present
+Tech stack: Java, SQL
+- Developed Java CRUD endpoints for the HR tool
+- Wrote SQL queries for employee reports
+
+EDUCATION
+B.Tech, Computer Science

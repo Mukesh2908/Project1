@@ -1,0 +1,18 @@
+Tara Krishnan
+tara.k@example.com
+
+PROFESSIONAL SUMMARY
+Python developer, recent graduate.
+
+TECHNICAL SKILLS
+Python, FastAPI, SQL
+
+PROJECTS
+Project 1: Internal Tools API
+Sep 2024 - Present
+Tech stack: Python, FastAPI
+- Developed Python FastAPI endpoints for internal tooling
+- Wrote SQL queries for the reporting view
+
+EDUCATION
+B.Tech, Computer Science

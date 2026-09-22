@@ -1,0 +1,17 @@
+Senior Software Engineer - React
+
+We are hiring a Senior Software Engineer (React) to build customer-facing React
+web applications for a large banking client in the BFSI domain.
+
+Responsibilities:
+- Build and ship React components for customer-facing banking journeys
+- Optimize front-end performance across the portfolio
+- Migrate legacy JavaScript screens to TypeScript
+- Work with Redux for application state management
+
+Requirements:
+- 4+ years of strong React experience, must have
+- Strong TypeScript skills required
+- Experience with Redux
+- Next.js exposure is nice to have
+- 4 to 7 years of total experience

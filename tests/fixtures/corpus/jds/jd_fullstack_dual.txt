@@ -1,0 +1,16 @@
+Full Stack Engineer - React and Node.js
+
+Own features end to end for a retail commerce platform.
+
+Responsibilities:
+- Build React front ends for the storefront
+- Develop Node.js services behind those screens
+- Design MongoDB collections for the catalogue
+- Ship features through the whole stack
+
+Requirements:
+- 4+ years of strong React experience, must have
+- 4+ years of strong Node.js experience, must have
+- Express required
+- MongoDB required
+- 4 to 8 years of total experience

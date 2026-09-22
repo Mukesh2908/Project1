@@ -1,0 +1,19 @@
+Deepak Menon
+deepak.m@example.com
+
+PROFESSIONAL SUMMARY
+Frontend engineer.
+
+TECHNICAL SKILLS
+React, TypeScript, Redux
+
+PROJECTS
+Project 1: Media Streaming UI
+Mar 2020 - Present
+Tech stack: React, TypeScript
+- Built React streaming interface used by 1M users in production
+- Optimized React rendering performance and cut load time 30%
+- Designed the React component system and mentored juniors
+
+EDUCATION
+B.E., Computer Science

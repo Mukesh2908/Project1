@@ -1,0 +1,27 @@
+Ravi Shankar
+ravi.s@example.com
+
+PROFESSIONAL SUMMARY
+Java developer.
+
+TECHNICAL SKILLS
+Java, Spring Boot, SQL
+
+PROJECTS
+Project 1: Service A
+Jan 2022 - Present
+Tech stack: Java, Spring Boot
+- Developed Java microservices with Spring Boot for the platform
+- Wrote SQL queries for reporting extracts
+
+Project 2: Service B
+Jan 2021 - Dec 2021
+Tech stack: Java, Spring Boot
+- Developed Java microservices with Spring Boot for the platform
+- Wrote SQL queries for reporting extracts
+
+Project 3: Service C
+Jan 2020 - Dec 2020
+Tech stack: Java, Spring Boot
+- Developed Java microservices with Spring Boot for the platform
+- Wrote SQL queries for reporting extracts

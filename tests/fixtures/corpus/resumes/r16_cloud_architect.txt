@@ -1,0 +1,24 @@
+Ramesh Gopalan
+ramesh.g@example.com
+
+PROFESSIONAL SUMMARY
+Cloud architect with 10 years.
+
+TECHNICAL SKILLS
+AWS, Terraform, Kubernetes, Docker
+
+PROJECTS
+Project 1: Manufacturing Cloud Migration
+Jan 2017 - Present
+Tech stack: AWS, Terraform, Kubernetes
+- Architected AWS landing zones for a manufacturing group in production
+- Led Terraform infrastructure design across 12 business units
+- Mentored engineers on Kubernetes adoption and reviewed designs
+- Designed the Docker container standards
+
+EDUCATION
+B.Tech, Electronics
+
+CERTIFICATIONS
+AWS Certified Solutions Architect, 2023
+Certified Kubernetes Administrator, 2023

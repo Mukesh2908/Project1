@@ -1,0 +1,20 @@
+Lakshmi Narayanan
+lakshmi.n@example.com
+
+PROFESSIONAL SUMMARY
+QA automation engineer.
+
+TECHNICAL SKILLS
+Selenium, Cypress, SQL, Java
+
+PROJECTS
+Project 1: Healthcare Platform QA
+Jan 2021 - Present
+Tech stack: Selenium, Cypress, SQL
+- Built Selenium regression automation suites covering 800 test cases
+- Developed Cypress tests for patient-facing journeys
+- Designed the automation framework and mentored two testers
+- Wrote SQL data setup scripts for test cases
+
+EDUCATION
+B.Sc., Computer Science

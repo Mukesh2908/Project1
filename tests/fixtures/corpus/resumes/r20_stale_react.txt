@@ -1,0 +1,20 @@
+Gopal Verma
+gopal.v@example.com
+
+PROFESSIONAL SUMMARY
+Engineer.
+
+TECHNICAL SKILLS
+React, SQL, Java
+
+PROJECTS
+Project 1: Legacy Portal
+Mar 2014 - Dec 2017
+Tech stack: React, SQL
+- Built React screens for the legacy portal
+- Wrote SQL queries for reports
+
+Project 2: Support Desk
+Jan 2018 - Feb 2019
+Tech stack: SQL
+- Supported the reporting platform and triaged incident tickets

@@ -1,0 +1,23 @@
+Farhan Sheikh
+farhan.s@example.com
+
+PROFESSIONAL SUMMARY
+DevOps engineer with 6 years.
+
+TECHNICAL SKILLS
+Kubernetes, Terraform, Docker, Jenkins, AWS
+
+PROJECTS
+Project 1: Telecom Delivery Platform
+Feb 2020 - Present
+Tech stack: Kubernetes, Terraform, Docker, Jenkins
+- Built and operated Kubernetes clusters running 200 services in production
+- Automated AWS infrastructure with Terraform across three regions
+- Designed Jenkins CI pipelines and cut build time 50%
+- Led the Docker image standardization and mentored the platform team
+
+EDUCATION
+B.Tech, Information Technology
+
+CERTIFICATIONS
+Certified Kubernetes Administrator, 2022

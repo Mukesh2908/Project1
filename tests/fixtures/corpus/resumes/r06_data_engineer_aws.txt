@@ -1,0 +1,20 @@
+Rohit Sharma
+rohit.s@example.com
+
+PROFESSIONAL SUMMARY
+Data engineer working on AWS.
+
+TECHNICAL SKILLS
+AWS Glue, PySpark, SQL, Airflow, AWS
+
+PROJECTS
+Project 1: Retail Analytics Lake
+Mar 2020 - Present
+Tech stack: AWS Glue, PySpark, SQL
+- Built AWS Glue ETL jobs feeding the retail analytics lake in production
+- Tuned PySpark transformations for nightly loads
+- Designed SQL models for the reporting layer
+- Automated Airflow scheduling across 40 jobs
+
+EDUCATION
+B.Tech, Computer Science

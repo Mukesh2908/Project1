@@ -4,7 +4,7 @@
 > consistency with its author's judgment — a regression guard — not
 > agreement with bench managers generally.
 
-Run: 2026-09-22T11:33:31  
+Run: 2026-09-22T16:01:02  
 Taxonomy version: `9f5c4831660efcf2`  
 Cases: 1
 
@@ -12,7 +12,7 @@ Cases: 1
 |---|---|---|---|
 | primary detection | 100.0% | 90% | pass |
 | top5 overlap | 100.0% | 70% | pass |
-| ndcg at 10 | 99.3% | — | — |
+| ndcg at 10 | 100.0% | — | — |
 | verdict agreement | 100.0% | 75% | pass |
 | review precision | 0.0% | — | — |
 

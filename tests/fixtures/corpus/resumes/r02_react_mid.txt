@@ -1,0 +1,19 @@
+Arjun Nair
+arjun.n@example.com
+
+PROFESSIONAL SUMMARY
+React developer with 3 years of experience.
+
+TECHNICAL SKILLS
+React, JavaScript, Redux
+
+PROJECTS
+Project 1: Travel Booking Site
+Jun 2022 - Present
+Tech stack: React, Redux
+- Developed React booking screens for the customer portal
+- Used Redux for search state
+- Built reusable React form components
+
+EDUCATION
+B.E., Information Science

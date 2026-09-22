@@ -1,0 +1,18 @@
+Sneha Pillai
+sneha.p@example.com
+
+PROFESSIONAL SUMMARY
+Reporting analyst.
+
+TECHNICAL SKILLS
+SQL, Python
+
+PROJECTS
+Project 1: Finance Reporting
+Apr 2021 - Present
+Tech stack: SQL
+- Wrote SQL queries for monthly finance reporting
+- Used SQL views to simplify recurring extracts
+
+EDUCATION
+B.Com

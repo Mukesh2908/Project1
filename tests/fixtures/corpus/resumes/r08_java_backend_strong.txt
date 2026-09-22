@@ -1,0 +1,27 @@
+Vikram Iyer
+vikram.i@example.com
+
+PROFESSIONAL SUMMARY
+Backend engineer with 7 years of Java.
+
+TECHNICAL SKILLS
+Java, Spring Boot, SQL, Kafka, Docker, Kubernetes
+
+PROJECTS
+Project 1: Payments Processing Platform
+Jun 2020 - Present
+Tech stack: Java, Spring Boot, Kafka, SQL
+- Built Java payment microservices with Spring Boot handling 4000 req/sec in production
+- Tuned SQL queries and added indexes cutting settlement runtime 60%
+- Designed Kafka event streams for reconciliation
+- Led the Spring Boot service architecture and mentored three engineers
+
+Project 2: Order Management System
+Mar 2017 - May 2020
+Tech stack: Java, Spring Boot, SQL
+- Developed Java order management APIs for an ecommerce client
+- Wrote SQL stored procedures for order reporting
+- Deployed services with Docker
+
+EDUCATION
+M.Tech, Software Engineering

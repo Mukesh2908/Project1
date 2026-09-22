@@ -1,0 +1,20 @@
+Suresh Babu
+suresh.b@example.com
+
+PROFESSIONAL SUMMARY
+Python engineer with 9 years.
+
+TECHNICAL SKILLS
+Python, Django, FastAPI, SQL, Docker
+
+PROJECTS
+Project 1: Logistics Platform
+Jan 2018 - Present
+Tech stack: Python, Django, SQL
+- Built Python Django services for logistics operations in production
+- Tuned SQL queries cutting dispatch report runtime 70%
+- Led the Python platform architecture and mentored five engineers
+- Designed FastAPI services for the new integration layer
+
+EDUCATION
+M.Tech, Computer Science

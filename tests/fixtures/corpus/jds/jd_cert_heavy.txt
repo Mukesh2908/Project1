@@ -1,0 +1,16 @@
+Cloud Solutions Architect
+
+Lead cloud migrations for a manufacturing client.
+
+Responsibilities:
+- Architect AWS landing zones
+- Lead Terraform infrastructure design
+- Mentor engineers on Kubernetes adoption
+
+Requirements:
+- 8+ years of strong AWS experience, must have
+- AWS Certified Solutions Architect required
+- Certified Kubernetes Administrator required
+- Terraform required
+- B.Tech degree required
+- 8 to 12 years of total experience

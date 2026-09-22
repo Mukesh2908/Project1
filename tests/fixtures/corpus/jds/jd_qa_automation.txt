@@ -1,0 +1,15 @@
+QA Automation Engineer
+
+Own test automation for a healthcare platform.
+
+Responsibilities:
+- Build Selenium automation suites for regression testing
+- Develop Cypress tests for front-end journeys
+- Maintain SQL data setup for test cases
+- Design the automation framework
+
+Requirements:
+- 3+ years of strong Selenium experience, must have
+- Cypress required
+- SQL exposure is nice to have
+- 3 to 6 years of total experience

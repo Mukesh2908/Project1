@@ -314,3 +314,61 @@ against a live model.** No provider keys are available in this environment.
 Every claim about the pipeline above is verified against the demo provider's
 hand-written rules, not against an actual LLM's judgment — that remains the
 largest untested assumption in the build.
+
+---
+
+## Found by the corpus stress test — 8 JDs x 24 resumes
+
+The fixture set was one JD and six resumes. That is enough to check that the
+pipeline runs and not much else: anything depending on JD variety, on
+multi-word skill names, or on phrasing the original fixtures happened not to
+use was structurally invisible. Expanding to 8 JDs across role families and 24
+resumes across lanes (192 pairings) surfaced four defects, all fixed:
+
+| Defect | Why a single-JD corpus could not see it | Fix |
+|---|---|---|
+| `--mock` returned the same fixed `JDAnalysis` for **every** JD | With one JD in the corpus, an analyzer that ignores its input is indistinguishable from one that reads it. A Data Engineer JD analysed as "Senior Software Engineer — React" | `app/ai/demo_provider.py` now genuinely parses the JD: skills from the taxonomy, signals per section 8.3, years, certs, domain, seniority, role family |
+| `validate_summary` rejected every **multi-word skill name** as hallucinated | It compares single word tokens against whole skill names, so "Azure Data Factory" fails on the token "Azure". The original corpus had only React, TypeScript, Redux and SQL — all single words | Skill names now contribute their individual words to the allowed set. Genuine hallucinations are still rejected |
+| Overlapping taxonomy aliases invented requirements | "Azure Data Factory" also matched bare "Azure", adding a phantom mandatory Azure requirement to every data JD | Matching consumes spans longest-alias-first, in a shared `skill_engine.find_skills` both the parser and the demo provider use |
+| Claim-vs-evidence never fired on the commonest phrasing | `"8 years of React experience"` captured the skill name as `"React experience"`, which is not in the taxonomy, so the claim was dropped. Only phrasings where the skill is the final word worked | `_claimed_years` scans a window after each years phrase for a known skill, splitting on sentence breaks so "8 years of Java. 6 years of React" attributes each figure correctly |
+
+Also corrected: the demo parser penalised team phrasing **three** times — ownership,
+an evidence-quality downgrade (which already caps depth), *and* a further
+explicit depth subtraction. Removing the double count dropped the measured
+writing-style gap from 8.6 points to **4.6 points**, and the matched pair no
+longer straddles a verdict boundary. The 8.3-point figure reported earlier was
+partly an artefact of the old phrase-table parser.
+
+### Open finding, not fixed: JD confidence punishes role-titled JDs
+
+Section 8.8 awards **30 of 100** confidence points for the primary skill
+appearing in the job title. A title that names the *role* rather than the
+*technology* can never earn them:
+
+| JD | Primary in title | Confidence |
+|---|---|---|
+| Java Backend Engineer | yes | 78% |
+| Senior Software Engineer — React | yes | 78% |
+| Full Stack Engineer — React and Node.js | yes | 68% |
+| Junior Python Developer | yes | 68% |
+| Cloud Solutions Architect | **no** | 43% |
+| DevOps Engineer | **no** | 43% |
+| QA Automation Engineer | **no** | 43% |
+| Senior Data Engineer | **no** | 33% |
+
+Half the corpus lands in Low confidence despite being unambiguous — "DevOps
+Engineer requiring Kubernetes" is not a hard JD to read. Because low JD
+confidence is itself a review trigger (section 12.3), **every** candidate on
+those runs is flagged: across the matrix, 36 of 46 scored candidates (78%) go
+to the review queue, and 15 of those are flagged for no reason other than the
+JD's own score. A queue holding 78% of the pool is not a queue.
+
+Real-world JDs are predominantly role-titled, so this is the common case, not
+the edge case.
+
+**Proposed fix, for a human to approve** because it changes scoring semantics
+across every run: award the title points when the title names the primary
+skill *or its role family* — "Senior Data Engineer" corroborates a
+`data_engineer` primary just as "React Developer" corroborates React. A title
+that contradicts the primary (a "Data Engineer" role whose primary reads as
+React) should still lose the points, which is what the signal is actually for.

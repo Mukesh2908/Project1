@@ -1,0 +1,22 @@
+Sandeep Kulkarni
+sandeep.k@example.com | +91 91234 56789
+Date of Birth: 14/08/1988   Gender: Male
+Marital Status: Married
+
+PROFESSIONAL SUMMARY
+Backend engineer with 8 years of Java. 6 years of React experience.
+
+TECHNICAL SKILLS
+Java, Spring Boot, Hibernate, Python, SQL, Scala, React, Angular, Vue,
+Docker, Kubernetes, Jenkins, Kafka, Airflow, MongoDB, PostgreSQL, Terraform,
+AWS, Azure, Databricks, PySpark, Selenium, Cypress
+
+PROJECTS
+Project 1: Payments Service
+Jun 2021 - Present
+Tech stack: Java, Spring Boot
+- Developed Java payment endpoints with Spring Boot
+- Wrote SQL queries for settlement checks
+
+EDUCATION
+M.Tech, Software Engineering

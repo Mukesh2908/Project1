@@ -1,0 +1,21 @@
+Farida Hussain
+farida.h@example.com
+
+PROFESSIONAL SUMMARY
+Data engineer.
+
+TECHNICAL SKILLS
+Databricks, PySpark, SQL
+
+PROJECTS
+Project 1: Analytics Platform
+Tech stack: Databricks, PySpark
+- Built Databricks pipelines for the analytics platform in production
+- Tuned PySpark jobs for throughput
+
+Project 2: Reporting Layer
+Tech stack: SQL
+- Developed SQL models for reporting
+
+EDUCATION
+B.Tech, Computer Science

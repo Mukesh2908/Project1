@@ -1,0 +1,16 @@
+DevOps Engineer
+
+Own the delivery platform for a telecom client.
+
+Responsibilities:
+- Build and maintain Kubernetes clusters
+- Automate infrastructure with Terraform
+- Design CI pipelines in Jenkins
+- Optimize Docker build and deploy times
+
+Requirements:
+- 4+ years of strong Kubernetes experience, must have
+- Terraform required
+- Docker required
+- AWS exposure is nice to have
+- 4 to 8 years of total experience

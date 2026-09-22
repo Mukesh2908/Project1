@@ -1,0 +1,26 @@
+Ananya Chatterjee
+ananya.c@example.com
+
+PROFESSIONAL SUMMARY
+Full stack engineer, React and Node.
+
+TECHNICAL SKILLS
+React, Node.js, Express, MongoDB, TypeScript
+
+PROJECTS
+Project 1: Commerce Storefront
+Jan 2021 - Present
+Tech stack: React, Node.js, Express, MongoDB
+- Built React storefront screens serving 500k customers in production
+- Developed Node.js and Express services behind the storefront
+- Designed MongoDB collections for the product catalogue
+- Led the full stack feature delivery and mentored two engineers
+
+Project 2: Admin Console
+Feb 2019 - Dec 2020
+Tech stack: React, Node.js
+- Developed React admin screens
+- Built Node.js APIs for the console
+
+EDUCATION
+B.Tech, Computer Science

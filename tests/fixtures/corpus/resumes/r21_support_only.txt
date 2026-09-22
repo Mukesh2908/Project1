@@ -1,0 +1,16 @@
+Anil Kumar
+anil.k@example.com
+
+PROFESSIONAL SUMMARY
+Production support engineer.
+
+TECHNICAL SKILLS
+Java, SQL, Kubernetes
+
+PROJECTS
+Project 1: Banking Support
+Jan 2021 - Present
+Tech stack: Java, SQL
+- Supported Java banking applications and triaged L2 incident tickets
+- Ran SQL data check queries to investigate reported issues
+- Maintained Kubernetes deployments during support rotations

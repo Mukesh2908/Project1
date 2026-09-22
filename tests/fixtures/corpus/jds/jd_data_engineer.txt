@@ -1,0 +1,17 @@
+Senior Data Engineer
+
+Join our data platform team building pipelines for an insurance client.
+
+Responsibilities:
+- Build and maintain Databricks pipelines over Delta Lake
+- Tune PySpark jobs for cost and throughput
+- Design ingestion with Azure Data Factory
+- Automate orchestration in Airflow
+
+Requirements:
+- 5+ years of strong Databricks experience, must have
+- Strong PySpark required
+- Azure Data Factory experience required
+- Advanced SQL for modelling and tuning
+- Kafka exposure is nice to have
+- 5 to 8 years of total experience

@@ -1,0 +1,14 @@
+Junior Python Developer
+
+Entry level role on our internal tools team.
+
+Responsibilities:
+- Develop Python services with FastAPI
+- Write SQL queries for reporting
+- Support existing Django applications
+
+Requirements:
+- 1+ years of Python experience
+- FastAPI exposure is nice to have
+- Django is a plus
+- 1 to 3 years of total experience

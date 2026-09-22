@@ -1,0 +1,27 @@
+Kavita Deshpande
+kavita.d@example.com
+
+PROFESSIONAL SUMMARY
+Data engineer with 6 years on Azure and Databricks.
+
+TECHNICAL SKILLS
+Databricks, PySpark, Azure Data Factory, SQL, Airflow, Kafka
+
+PROJECTS
+Project 1: Insurance Data Platform
+Feb 2021 - Present
+Tech stack: Databricks, PySpark, Azure Data Factory
+- Built Databricks Delta Lake pipelines processing 4TB daily in production
+- Tuned PySpark jobs and cut cluster cost 45%
+- Designed Azure Data Factory ingestion for 30 source systems
+- Led the Airflow orchestration redesign and mentored two engineers
+
+Project 2: Claims Reporting Warehouse
+Jan 2019 - Jan 2021
+Tech stack: SQL, Azure Data Factory, Airflow
+- Developed SQL models with window functions for claims reporting
+- Automated Airflow DAGs for nightly loads
+- Optimized SQL query tuning and added indexes cutting runtime 60%
+
+EDUCATION
+M.Tech, Data Science

@@ -1,0 +1,16 @@
+Java Backend Engineer
+
+Build payment microservices for a fintech platform.
+
+Responsibilities:
+- Develop Java microservices with Spring Boot
+- Design and tune SQL schemas for transaction throughput
+- Integrate Kafka event streams
+- Deploy services with Docker and Kubernetes
+
+Requirements:
+- 5+ years of strong Java experience, must have
+- Spring Boot required
+- Strong SQL required
+- Kubernetes exposure is nice to have
+- 5 to 9 years of total experience

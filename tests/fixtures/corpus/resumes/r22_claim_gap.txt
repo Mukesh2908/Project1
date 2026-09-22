@@ -1,0 +1,17 @@
+Neha Bhatt
+neha.b@example.com
+
+PROFESSIONAL SUMMARY
+Frontend engineer with 8 years of React experience.
+
+TECHNICAL SKILLS
+React, TypeScript
+
+PROJECTS
+Project 1: Dashboard Revamp
+Jan 2023 - Present
+Tech stack: React
+- Developed React dashboard components for the internal tool
+
+EDUCATION
+B.Tech, Computer Science
