@@ -32,7 +32,10 @@ facts = result.facts
 cols = st.columns([3, 1, 1, 1])
 cols[0].markdown(f"### {result.display_name}")
 cols[1].metric("Match Score", f"{result.match_score:.1f}%")
-cols[2].metric("Verdict", verdict_chip(result.verdict))
+# st.metric truncates a long value to an ellipsis ("Deploy..."), which is
+# useless for the one field a reader most needs to read.
+cols[2].markdown("Verdict")
+cols[2].markdown(f"### {verdict_chip(result.verdict)}")
 cols[3].metric("Confidence", f"{result.analysis_confidence}%", result.confidence_band)
 
 st.caption(
@@ -81,14 +84,27 @@ with tabs[1]:
     for skill in facts["skills"]:
         if skill["fit"] == 0 and not skill["evidence"]:
             continue
+        # When a requirement is credited through a different technology, say
+        # so in the header. The years, project count and quotes below all
+        # belong to the matched skill, not the requirement, and burying that
+        # in a caption under the quotes reads as if the candidate had direct
+        # experience they do not have.
+        via = ""
+        if skill["relation"] not in ("exact", "none") and skill["matched_skill"]:
+            via = f" · _via {skill['matched_skill']} ({skill['relation']})_"
         header = (
-            f"**{skill['skill']}** · {skill['tier']} · needs {skill['needs']} · "
+            f"**{skill['skill']}**{via} · {skill['tier']} · needs {skill['needs']} · "
             f"found {skill['found']} · {skill['projects']} project(s) · "
             f"{skill['last_used']} — **{skill['fit']}%**"
         )
         if not skill["scored"]:
             header += "  _(reported, not scored)_"
         st.markdown(header)
+        if via:
+            st.caption(
+                f"The evidence below is {skill['matched_skill']} work, credited at the "
+                f"{skill['relation']} rate — not direct {skill['skill']} experience."
+            )
         for quote in skill["evidence"]:
             st.code(quote, language=None)
         if skill["gap"] != "Evidence found":
